@@ -22,9 +22,9 @@ class CamelHand:
     def __init__(self, cards: list[int], bid: int):
         self.cards = cards
         self.bid = bid
-        self.__determine_type()
+        self.type = self.__determine_type()
 
-    def __determine_type(self):
+    def __determine_type(self) -> HandType:
         unique_cards: dict[int, int] = {}
         for card in self.cards:
             unique_cards[card] = 1 if card not in unique_cards else unique_cards[card] + 1
@@ -35,19 +35,18 @@ class CamelHand:
         unique_cards_nums: list[int] = list(unique_cards.values())
         unique_cards_nums.sort(reverse=True)
         if len(unique_cards_nums) == 0:
-            self.type = HandType.FIVE
-            return
+            return HandType.FIVE
         unique_cards_nums[0] += jokers
         if len(unique_cards_nums) == 1:
-            self.type = HandType.FIVE
+            return HandType.FIVE
         elif len(unique_cards_nums) == 2:
-            self.type = HandType.FOUR if unique_cards_nums[0] == 4 else HandType.FULL
+            return HandType.FOUR if unique_cards_nums[0] == 4 else HandType.FULL
         elif len(unique_cards_nums) == 3:
-            self.type = HandType.THREE if unique_cards_nums[0] == 3 else HandType.TWO_PAIR
+            return HandType.THREE if unique_cards_nums[0] == 3 else HandType.TWO_PAIR
         elif len(unique_cards_nums) == 4:
-            self.type = HandType.PAIR
+            return HandType.PAIR
         else:
-            self.type = HandType.HIGH_CARD
+            return HandType.HIGH_CARD
 
 
 def compare_hands(hand1: CamelHand, hand2: CamelHand) -> int:
